@@ -1,0 +1,75 @@
+{
+  "name": "piezo",
+  "version": "0.0.1",
+  "description": "React static site builder",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "bin": {
+    "piezo": "./piezo.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adoppler/piezo.git"
+  },
+  "keywords": [
+    "react",
+    "static",
+    "site",
+    "builder",
+    "generator",
+    "webpack",
+    "react-rotuer"
+  ],
+  "author": "adoppler",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adoppler/piezo/issues"
+  },
+  "homepage": "https://github.com/adoppler/piezo#readme",
+  "dependencies": {
+    "babel-core": "^6.8.0",
+    "babel-loader": "^6.2.4",
+    "babel-plugin-transform-react-pure-class-to-function": "^1.0.1",
+    "babel-plugin-transform-react-remove-prop-types": "^0.2.6",
+    "babel-plugin-transform-runtime": "^6.8.0",
+    "babel-preset-es2015-webpack": "^6.4.1",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-react-hmre": "^1.1.1",
+    "babel-preset-stage-0": "^6.5.0",
+    "compression": "^1.6.1",
+    "css-loader": "^0.23.1",
+    "directory-tree": "^1.0.0",
+    "doc-ready": "^1.0.3",
+    "express": "^4.13.4",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^0.8.5",
+    "front-matter": "^2.0.7",
+    "html-webpack-plugin": "^2.16.1",
+    "htmltidy": "0.0.6",
+    "http-server": "^0.9.0",
+    "js-beautify": "^1.6.2",
+    "json-loader": "^0.5.4",
+    "mkdirp": "^0.5.1",
+    "postcss-loader": "^0.9.1",
+    "raw-loader": "^0.5.1",
+    "react": "^15.0.1",
+    "react-dom": "^15.0.1",
+    "react-helmet": "^3.1.0",
+    "react-router": "^2.4.0",
+    "react-svg-loader": "^1.0.1",
+    "remarkable": "^1.6.2",
+    "sass-loader": "^3.2.0",
+    "sitemap": "^1.6.0",
+    "style-loader": "^0.13.1",
+    "toolbox-loader": "0.0.3",
+    "url-loader": "^0.5.7",
+    "webpack-dev-middleware": "^1.6.1",
+    "webpack-hot-middleware": "^2.10.0"
+  },
+  "optionalDependencies": {
+    "postcss": "^5.0.18",
+    "node-sass": "3.4.2"
+  }
+}
