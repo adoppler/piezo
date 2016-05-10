@@ -97,11 +97,6 @@ function entry(conf) {
   } else if (conf.production) {
     return {
       [conf.webpack.bundleName]: path.join(__dirname, './entry/site'),
-      common: [
-        'react',
-        'react-dom',
-        'react-router',
-      ].concat(conf.webpack.commonChunkLibs)
     }
   }
 
@@ -140,8 +135,8 @@ function plugins(conf) {
         mangle: true,
       }),
       new webpack.optimize.CommonsChunkPlugin({
-        name: 'common',
-        minChunks: Infinity
+        children: true,
+        minChunks: 3
       }),
       // new webpack.optimize.MinChunkSizePlugin({
       //   minChunkSize: 16384
