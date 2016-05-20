@@ -41,7 +41,7 @@ function wrapWithTemplate(data) {
                         .replace('{{title}}', data.title || '')
                         .replace('{{topComment}}', config.html.topComment ? `<!-- ${config.html.topComment} -->\n` : '')
                         .replace(/\sdata\-react\-helmet="true"/g, '')
-                        .replace(/><\/script>/g, ' defer></script>')
+                        .replace(/><\/script>/g, ' async defer></script>')
 
   const pretty = beautify_html(html, {
     indent_size: 2,
