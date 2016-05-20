@@ -13,7 +13,6 @@ const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 const config = require('../config')
 
 const outputDir = path.join(path.join(config.__root, config.build.output))
-const template = fs.readFileSync(path.join(outputDir, 'index.html')).toString()
 
 function reduceRoutesToUrls(routes) {
   return [routes].reduce(function getChildren(acc, route) {
@@ -31,7 +30,12 @@ function reduceRoutesToUrls(routes) {
   }, [])
 }
 
+var template
 function wrapWithTemplate(data) {
+  if (!template) {
+    template = fs.readFileSync(path.join(outputDir, 'index.html')).toString()
+  }
+
   const html = template.replace('{{meta}}', data.meta || '')
                         .replace('{{link}}', data.link || '')
                         .replace('{{title}}', data.title || '')
