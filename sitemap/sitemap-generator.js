@@ -1,20 +1,20 @@
 'use strict';
-/* eslint no-console: 0 */
+
+const fs = require('fs')
+const path = require('path')
 
 const beautify_html = require('js-beautify').html
-const fs = require('fs')
 const mkdirp = require('mkdirp')
-const path = require('path')
+const rimraf = require('rimraf')
 const sm = require('sitemap')
 const webpack = require('webpack')
 
-const config = require(path.join(process.cwd(), 'piezo.config'))
-const webpackConfig = require('./webpack-config.js')(Object.assign({ serverRender: true }, config))
+const config = require('../config')
 
-const www = path.join(path.join(process.cwd(), 'www'))
-const template = fs.readFileSync(path.join(www, 'index.html')).toString()
+const outputDir = path.join(path.join(config.__root, config.build.output))
+const template = fs.readFileSync(path.join(outputDir, 'index.html')).toString()
 
-function reduceRoutes(routes) {
+function reduceRoutesToUrls(routes) {
   return [routes].reduce(function getChildren(acc, route) {
     const uri = route.path
     const parent = uri === '/' ? '' : uri
@@ -30,12 +30,11 @@ function reduceRoutes(routes) {
   }, [])
 }
 
-function compileTemplate(data) {
+function wrapWithTemplate(data) {
   const html = template.replace('{{meta}}', data.meta || '')
                         .replace('{{link}}', data.link || '')
                         .replace('{{title}}', data.title || '')
-                        .replace('{{topComment}}', config.html.topComment)
-
+                        .replace('{{topComment}}', config.html.topComment ? `<!-- ${config.html.topComment} -->\n` : '')
                         .replace(/\sdata\-react\-helmet="true"/g, '')
                         .replace(/><\/script>/g, ' defer></script>')
 
@@ -49,20 +48,19 @@ function compileTemplate(data) {
   })
 
   return pretty.replace('{{html}}', data.html)
-                .replace(/class=""\s/g, '')
 }
 
 function makeRouteDirectory(route) {
-  return new Promise((resolve, fail) => {
+  return new Promise((resolve, reject) => {
     const uri = route.substr(1)
     if (uri === '404') {
-      resolve(path.join(www, '404.html'))
+      resolve(path.join(outputDir, '404.html'))
     } else {
-      const dir = path.join(www, route.substr(1))
+      const dir = path.join(outputDir, route.substr(1))
 
       mkdirp(dir, (direrr) => {
         if (direrr) {
-          fail(direrr)
+          reject(direrr)
         } else {
           resolve(`${dir}/index.html`)
         }
@@ -72,12 +70,12 @@ function makeRouteDirectory(route) {
 }
 
 function writeHtmlFile(file, html) {
-  return new Promise((resolve, fail) => {
+  return new Promise((resolve, reject) => {
     fs.writeFile(file, html, (fserr) => {
       if (fserr) {
-        fail(fserr)
+        reject(fserr)
       } else {
-        console.log(`wrote ${file.replace(www, '')}`)
+        console.log(`wrote ${file.replace(outputDir, '')}`)
         resolve()
       }
     })
@@ -86,7 +84,7 @@ function writeHtmlFile(file, html) {
 
 function writeFile(route, data) {
   makeRouteDirectory(route).then(file => {
-    const html = compileTemplate(data)
+    const html = wrapWithTemplate(data)
     if (html) {
       return writeHtmlFile(file, html)
     }
@@ -95,13 +93,13 @@ function writeFile(route, data) {
 }
 
 function writeSitemap(routes) {
-  return new Promise((resolve, fail) => {
+  return new Promise((resolve, reject) => {
     const sitemap = sm.createSitemap({
-      hostname: config.hostname,
+      hostname: config.sitemap.hostname,
       urls: routes.filter(r => !r.endsWith('404')).map(r => {
         const parts = r.split('/')
         const name = parts.length > 0 ? parts[parts.length - 1] : 'home'
-        const base = path.join(process.cwd(), r.indexOf('blog') > -1 ? `../src/blog/${name}` : `../src/pages/${name}`) // TODO
+        const base = path.join(config.__root, config.build.source, `pages/${name}`)
 
         let lastmodfile
         if (fs.existsSync(`${base}.js`)) {
@@ -112,8 +110,6 @@ function writeSitemap(routes) {
           lastmodfile = `${base}.mdown`
         } else if (fs.existsSync(`${base}.markdown`)) {
           lastmodfile = `${base}.markdown`
-        } else if (fs.existsSync(`${base}.toml`)) {
-          lastmodfile = `${base}.toml`
         }
 
         return {
@@ -131,25 +127,34 @@ function writeSitemap(routes) {
       wrap_line_length: 0,
     })
 
-    fs.writeFile(path.join(www, 'sitemap.xml'), xml, (fserr) => {
-      if (fserr) { return fail(fserr) }
+    fs.writeFile(path.join(outputDir, 'sitemap.xml'), xml, (fserr) => {
+      if (fserr) { return reject(fserr) }
       console.log('wrote /sitemap.xml')
       resolve()
     })
   })
 }
 
-console.log('Rendering routes...')
+const webpackConfig = require('../webpack/webpack-config.js')(Object.assign({ __serverRender: true }, config))
 
 webpack(webpackConfig, (err, stats) => {
   if (err) { throw err }
-  const app = require(path.resolve(process.cwd(), `.tmp/${config.webpack.bundleName}.js`))
-  const routes = reduceRoutes(app.routes)
+  console.log('Rendering routes...')
+
+  const tmp = path.resolve(config.__root, config.build.output, `.tmp`)
+  const app = require(path.join(tmp, '${config.webpack.bundleName}.js'))
+  const routes = reduceRoutesToUrls(app.routes)
 
   Promise.all(routes.map(route =>
     app.render(route)
       .then(data => writeFile(route, data))
       .catch(error => console.log('Error Rendering Route', route, error))
   ).concat(writeSitemap(routes)))
-  .catch(error => console.error(error) || process.exit(1))
+  .then(() => {
+    console.log('REMOVE', tmp)
+    // rimraf.sync(tmp)
+  })
+  .catch(error => {
+    throw error
+  })
 })
