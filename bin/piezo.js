@@ -17,15 +17,18 @@ function checkError(err) {
 }
 
 function clean(cb) {
+  console.log('cleaning...')
   const rimraf = require('rimraf')
 
   rimraf(output, (err) => {
+    console.log('cleaned')
     checkError(err)
     cb()
   })
 }
 
 function build() {
+  console.log('building...')
   process.env['NODE_ENV'] = 'production'
 
   const cpr = require('cpr')
@@ -52,11 +55,12 @@ function build() {
           summary: false
         })
       )
-
+      console.log('webpack...')
       compiler.run((webpackError) => {
         checkError(webpackError)
-
+        console.log('sitemap...')
         generateSitemap((sitemapError) => {
+          console.log('done')
           checkError(sitemapError)
 
           console.log(chalk.green.bold(`Success after (${(Date.now() - startTime) / 1000 + 's'})`))
