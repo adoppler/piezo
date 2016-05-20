@@ -21,7 +21,7 @@ module.exports = function webpackConfig(options) {
     },
     output: output(conf),
     plugins: plugins(conf),
-    postcss: conf.postcssPlugins,
+    postcss: conf.webpack.postCssPlugins,
     resolve: {
       extensions: ['.js', '.json', '.css', '.sass', '.scss'],
       modules: [
@@ -42,6 +42,8 @@ module.exports = function webpackConfig(options) {
     },
     noInfo: !conf.production,
     target: conf.__serverRender ? 'node' : 'web',
-    toolbox: conf.webpack.toolbox
+    toolbox: conf.webpack.toolbox,
+    bail: conf.production,
+    progress: conf.production,
   }
 }

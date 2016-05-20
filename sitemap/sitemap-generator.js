@@ -2,12 +2,13 @@
 
 const fs = require('fs')
 const path = require('path')
-
+const chalk = require('chalk')
 const beautify_html = require('js-beautify').html
 const mkdirp = require('mkdirp')
 const rimraf = require('rimraf')
 const sm = require('sitemap')
 const webpack = require('webpack')
+const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 
 const config = require('../config')
 
@@ -75,7 +76,6 @@ function writeHtmlFile(file, html) {
       if (fserr) {
         reject(fserr)
       } else {
-        console.log(`wrote ${file.replace(outputDir, '')}`)
         resolve()
       }
     })
@@ -129,32 +129,49 @@ function writeSitemap(routes) {
 
     fs.writeFile(path.join(outputDir, 'sitemap.xml'), xml, (fserr) => {
       if (fserr) { return reject(fserr) }
-      console.log('wrote /sitemap.xml')
       resolve()
     })
   })
 }
 
 const webpackConfig = require('../webpack/webpack-config.js')(Object.assign({ __serverRender: true }, config))
+const compiler = webpack(webpackConfig)
 
-webpack(webpackConfig, (err, stats) => {
-  if (err) { throw err }
-  console.log('Rendering routes...')
-
-  const tmp = path.resolve(config.__root, config.build.output, `.tmp`)
-  const app = require(path.join(tmp, '${config.webpack.bundleName}.js'))
-  const routes = reduceRoutesToUrls(app.routes)
-
-  Promise.all(routes.map(route =>
-    app.render(route)
-      .then(data => writeFile(route, data))
-      .catch(error => console.log('Error Rendering Route', route, error))
-  ).concat(writeSitemap(routes)))
-  .then(() => {
-    console.log('REMOVE', tmp)
-    // rimraf.sync(tmp)
+compiler.apply(
+  new ProgressBarPlugin({
+    format: '  server render  [:bar] :percent',
+    clear: false,
+    width: 60,
+    summary: false
   })
-  .catch(error => {
-    throw error
+)
+
+module.exports = function generateSitemap(callback) {
+  compiler.run((err, stats) => {
+    if (err) { throw err }
+
+    const tmp = path.resolve(config.__root, config.build.output, `.tmp`)
+    const app = require(path.join(tmp, 'bundle.js'))
+    const routes = reduceRoutesToUrls(app.routes)
+
+    Promise.all(
+      routes.map(route =>
+        app.render(route)
+        .then(data => {
+          writeFile(route, data)
+        })
+        .catch(error => {
+          console.log('Error Rendering Route', route, error)
+          process.exit(1)
+        })
+      ).concat(writeSitemap(routes))
+    )
+    .then(() => {
+      rimraf.sync(tmp)
+      callback()
+    })
+    .catch(error => {
+      callback(error)
+    })
   })
-})
+}

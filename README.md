@@ -5,7 +5,7 @@
 piezo is a static site generator library that:
 
 * Converts a directory of js or plain text files to a single-page site with a fallback to pre-rendered html
-* Outputs a fully static site (complete with sitemap.xml) that is SEO friendly and ready to deploy on any web host
+* Outputs a fully static site (complete with an updated sitemap.xml) that is SEO friendly and ready to deploy on any web host
 * Automatically optimizes your production app with best practices like minification and code splitting
 
 piezo optimized your workflow by:
