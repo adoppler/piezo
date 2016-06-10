@@ -8,7 +8,7 @@ const config = require(path.join(root, 'piezo.config.js'))
 
 const defaults = {
   html: {
-    topComment: ''
+    topComment: '',
     title: 'Site',
     template: null,
   },
