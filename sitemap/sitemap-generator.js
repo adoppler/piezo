@@ -38,6 +38,7 @@ function wrapWithTemplate(data) {
 
   const html = template.replace('{{meta}}', data.meta || '')
                         .replace('{{link}}', data.link || '')
+                        .replace('{{script}}', data.script || '')
                         .replace('{{title}}', data.title || '')
                         .replace('{{topComment}}', config.html.topComment ? `<!-- ${config.html.topComment} -->\n` : '')
                         .replace(/\sdata\-react\-helmet="true"/g, '')
