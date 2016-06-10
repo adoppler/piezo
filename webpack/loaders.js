@@ -62,7 +62,7 @@ module.exports = function loaders(conf) {
     sassLoader,
     {
       test: /\.(png|jpg|gif)$/,
-      loader: 'url?limit=8192,name=images/[name]-[hash].[ext]'
+      loader: 'url?limit=2048,name=images/[name]-[hash].[ext]'
     },
     {
       test: /\.(woff|woff2|ttf|eot|ico)$/,
