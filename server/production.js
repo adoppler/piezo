@@ -12,5 +12,5 @@ const notFound = fs.readFileSync(path.join(root, '404.html')).toString()
 module.exports = function piezoProdServer(app) {
   app.use(compression())
   app.use(express.static(root, { maxAge: 31536000000 }))
-  app.get('*', (req, res) => res.send(404, notFound))
+  app.get('*', (req, res) => res.status(404).send(notFound))
 }
