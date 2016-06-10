@@ -49,7 +49,65 @@ Please note that piezo is still very much in alpha mode.
 
 ## Setup
 
-TODO
+Add a piezo.config.js file to the root of your repo. This file should export a configuration object,
+
+```
+module.exports = {
+  html: {
+    title: '',                  // default page title
+    template: '',               // path to html template file (optional)
+    topComment: ''              // add a comment to the top of every html file (optional)
+  },
+  build: {
+    source: '',                 // path to source directory (default './src')
+    output: ''                  // path to build target (default './dist')
+  },
+  webpack: {
+    bundleName: '',             // base name for js bundle (default 'app')
+    publicPath: '',             // webpack public path (default '/static/')
+    plugins: [],                // require any additional webpack plugins to include in the production build (optional)
+    devPlugins: [],             // require any additional webpack plugins to include in development mode (optional)
+    loaders: [],                // require any additional webpack loaders (optional)
+    postCssPlugins: [],         // array of PostCSS plugins (optional, recommend autoprefixer at a minimum)
+  },
+  server: {
+    host: 'localhost',          // development server hostname (default localhost)
+    port: 8080,                 // development server port (default 8080)
+  },
+  sitemap: {
+    hostname: '',               // url of your site (used for sitemap generation)
+  }
+}
+
+```
+
+`${config.boud.source}/index.js` can also export a few items to extend functionality
+
+```
+export const routerProps = {
+  onError() {}
+}
+
+export function RootComponent(props) {
+  // if defined, this will wrap the entire site including the router
+  // (useful for integration with libraries like react-redux)
+}
+```
+
+## Usage
+
+```
+piezo server    # start the development server
+```
+```
+piezo build     # build your production-ready site
+```
+```
+piezo clean     # clean up all generated files
+```
+```
+piezo build && NODE_ENV=production piezo server    # build your production site and preview locally
+```
 
 ## Contributing
 

@@ -8,9 +8,9 @@ const config = require(path.join(root, 'piezo.config.js'))
 
 const defaults = {
   html: {
-    // topComment: ''
+    topComment: ''
     title: 'Site',
-    // template: '',
+    template: null,
   },
   build: {
     source: './src',
@@ -22,10 +22,7 @@ const defaults = {
     plugins: [],
     devPlugins: [],
     loaders: [],
-    postCssPlugins: [],
-    // toolbox: {
-    //   theme: 'src/theme.scss'
-    // }
+    postCssPlugins: []
   },
   server: {
     hostname: 'localhost',
