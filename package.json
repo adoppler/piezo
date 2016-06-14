@@ -60,7 +60,6 @@
     "progress-bar-webpack-plugin": "^1.8.0",
     "raw-loader": "^0.5.1",
     "react-helmet": "^3.1.0",
-    "react-router": "^2.4.0",
     "react-svg-loader": "^1.0.1",
     "remarkable": "^1.6.2",
     "rimraf": "^2.5.2",
@@ -69,13 +68,14 @@
     "style-loader": "^0.13.1",
     "toolbox-loader": "0.0.3",
     "url-loader": "^0.5.7",
+    "webpack": "^2.1.0-beta.13",
     "webpack-dev-middleware": "^1.6.1",
     "webpack-hot-middleware": "^2.10.0"
   },
   "peerDependencies": {
     "react": "^15.0.1",
     "react-dom": "^15.0.1",
-    "webpack": "^2.1.0-beta.5"
+    "react-router": "^2.4.0"
   },
   "optionalDependencies": {
     "postcss": "^5.0.18",
