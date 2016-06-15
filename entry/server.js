@@ -3,7 +3,7 @@ import { renderToString } from 'react-dom/server'
 import { RouterContext, match } from 'react-router'
 import Helmet from 'react-helmet'
 
-import routes from 'babel!routes!pages'
+import routes from 'routes!pages'
 import { RootComponent } from 'index.js'
 
 export { routes }

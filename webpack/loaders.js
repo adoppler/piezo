@@ -44,10 +44,34 @@ module.exports = function loaders(conf) {
     }
   }
 
+  const babelQuery = conf.babelQuery || {
+    presets: [
+      'react',
+      'es2015-webpack',
+      'stage-0',
+      'react-hmre'
+    ],
+    env: {
+      development: {
+        presets: [
+          'react-hmre'
+        ]
+      },
+      production: {
+        plugins: [
+          'transform-react-remove-prop-types',
+          'transform-react-pure-class-to-function',
+        ],
+      }
+    },
+    cacheDirectory: true
+  }
+
   return [
     {
       test: /\.jsx?$/,
       loader: 'babel',
+      query: babelQuery,
       include: [
         path.resolve(conf.__root, conf.build.source),
         path.resolve(__dirname, '../entry')
@@ -55,7 +79,11 @@ module.exports = function loaders(conf) {
     },
     {
       test: /\.(md|markdown)$/,
-      loader: 'babel!page!raw',
+      loaders: [
+        { loader: 'babel', query: babelQuery },
+        'page',
+        'raw'
+      ],
       include: path.resolve(conf.__root, conf.build.source, 'pages'),
     },
     cssLoader,
@@ -78,7 +106,7 @@ module.exports = function loaders(conf) {
     },
     {
       test: /\.svg$/,
-      loader: 'babel!react-svg'
+      loader: 'react-svg?es5=1'
     },
   ].concat(conf.webpack.loaders || [])
 }

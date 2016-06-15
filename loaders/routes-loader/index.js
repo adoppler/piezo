@@ -1,11 +1,21 @@
+'use strict'
+
 const dtree = require('directory-tree')
 
 function isIndex(file) {
   return file.name.startsWith('index.')
 }
 
-function isNotIndex(file) {
-  return !isIndex(file)
+function isLayout(file) {
+  return file.name.startsWith('_layout.')
+}
+
+function is404(file) {
+  return file.name.startsWith('404.') || file.name.startsWith('*.')
+}
+
+function isRoute(file) {
+  return !isIndex(file) && !isLayout(file) && !file.name.startsWith('_')
 }
 
 function getComponent(path) {
@@ -26,12 +36,14 @@ function getComponent(path) {
 
 function fileToRoute(file, parent) {
   if (file.children !== undefined) {
-    return dirToRoutes(file, `${parent}/`)
+    return dirToRoutes.call(this, file, `${parent}/`)
   }
 
   const name = file.name.replace(parent, '').split('.')[0]
   const path = name === 'index' ? '' : `path: "${name}",`
   const componentPath = `${parent || ''}/${file.name}`
+
+  this.addDependency(file.path)
 
   return `{
     ${path}
@@ -42,25 +54,32 @@ function fileToRoute(file, parent) {
 
 function dirToRoutes(dir, parent) {
   const index = dir.children.find(isIndex)
-  const children = dir.children ? dir.children.filter(isNotIndex) : null
+  const layout = dir.children.find(isLayout)
+  const notFound = dir.children.find(is404)
+  const children = dir.children ? dir.children.filter(isRoute) : null
 
   const current = (parent || '') + dir.name
-  const component = parent ? '' : getComponent('layouts')
 
-  const routes = children.map(c => fileToRoute(c, current))
+  const layoutComponent = layout ? getComponent(`${current}/${layout.name}`) : ''
 
-  if (!parent) {
+  const routes = children.map(c => fileToRoute.call(this, c, current))
+
+  if (notFound) {
     routes.push(`{
       path: '*',
-      ${getComponent('pages/404')}
+      ${getComponent(`${current}/${notFound.name}`)}
     }`)
   }
 
+  if (index) { this.addDependency(index.path) }
+  if (notFound) { this.addDependency(notFound.path) }
+  if (layout) { this.addDependency(layout.path) }
+
   const childRoutes = children ? `childRoutes: [${routes.join(',\n')}],` : ''
-  const indexRoute = index ? `indexRoute: ${fileToRoute(index, current)},` : ''
+  const indexRoute = index ? `indexRoute: ${fileToRoute.call(this, index, current)},` : ''
 
   return `{
-    ${component}
+    ${layoutComponent}
     path: "${parent ? dir.name : '/'}",
     ${indexRoute}
     ${childRoutes}
@@ -70,7 +89,7 @@ function dirToRoutes(dir, parent) {
 module.exports = function routesLoader(source) {
   const root = this.resourcePath.replace(/\/([^\/]*)$/, '')
   const tree = dtree(root)
-  const routes = dirToRoutes(tree)
+  const routes = dirToRoutes.call(this, tree)
 
   this.addContextDependency(root)
   this.cacheable()

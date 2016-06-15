@@ -7,14 +7,30 @@ const md = new Remarkable({
   typographer: true,
 })
 
-function PageComponent(props, layoutPath, child) {
+function PageComponent(props, layoutPath, html) {
+  const content = html ? `<div>${html}</div>` : 'null'
+
+  if (!layoutPath) {
+    return `import React, { Component } from 'react'
+
+    export default class Page extends Component {
+
+      render() {
+        return (
+          ${content}
+        )
+      }
+    }
+    `
+  }
+
   return `import React, { Component } from 'react'
   import Layout from '${layoutPath}'
 
   export default class Page extends Component {
 
     render() {
-      return React.createElement(Layout, ${JSON.stringify(Object.assign({}, props, { layout: undefined }))}, ${child || 'null'})
+      return React.createElement(Layout, ${JSON.stringify(props)}, ${content})
     }
   }
   `
@@ -25,7 +41,7 @@ function createMarkdownComponent(src) {
   const props = matter.attributes
   const html = md.render(matter.body).trim().replace(/\n/g, '\n        ')
 
-  return PageComponent(props, props.layout, `<div>${html}</div>`)
+  return PageComponent(props, props.layout, html)
 }
 
 module.exports = function pageLoader(source) {

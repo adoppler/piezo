@@ -3,6 +3,12 @@ const config = require('../config')
 
 const app = express()
 
+if (config.server.middleware) {
+  config.server.middleware.forEach(m => {
+    app.use.apply(app, Array.isArray(m) ? m : [m])
+  })
+}
+
 if (process.env.NODE_ENV === 'production') {
   require('./production')(app)
 } else {

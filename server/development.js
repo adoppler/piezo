@@ -16,10 +16,29 @@ const index = `<!doctype html>
 module.exports = function piezoDevServer(app) {
   app.use(require('webpack-dev-middleware')(compiler, {
     noInfo: true,
-    publicPath: webpackConfig.output.publicPath
+    publicPath: webpackConfig.output.publicPath,
+    stats: {
+      chunkModules: false,
+      chunkOrigins: false,
+      chunks: false,
+      modules: false,
+      hash: false,
+      version: false,
+      timings: false,
+      assets: false,
+    }
   }))
 
   app.use(require('webpack-hot-middleware')(compiler))
+
+  app.use(function(err, req, res, next) {
+    console.log('FAIL', err)
+      res.status(err.status || 500);
+      res.render('error', {
+          message: err.message,
+          error: err
+      });
+  });
 
   app.get('*', (req, res) => res.send(index))
 }
