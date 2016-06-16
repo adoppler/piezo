@@ -34,7 +34,7 @@ module.exports = function pageLoader(source) {
 
   try {
     if (extension === 'md' || extension === 'markdown' || extension === 'mdown') {
-      return createMarkdownComponent.call(this, this.exec(source.toString()))
+      return createMarkdownComponent.call(this, this.exec(source.toString(), this.resourcePath))
     }
   } catch (e) {
     if (e instanceof SyntaxError || e.name === 'SyntaxError') {
