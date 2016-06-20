@@ -1,15 +1,20 @@
+'use strict'
+
 const path = require('path')
 const merge = require('lodash.merge')
 const approot = require('app-root-path').path
 
 const root = approot.match(/piezo$/) ? process.cwd() : approot
 
-const config = require(path.join(root, 'piezo.config.js'))
+let config
+try {
+  config = require(path.join(root, 'piezo.config.js'))
+} catch (e) {}
 
 const defaults = {
   html: {
     topComment: '',
-    title: 'Site',
+    title: '',
     template: null,
   },
   build: {

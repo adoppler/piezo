@@ -1,114 +1,32 @@
 # piezo
 
+Charge up your React app with minimal configuration.
+
 ## What is it?
 
-piezo is a static site generator library that:
+Piezo simplifies your workflow by wrapping react, react-router, webpack@2.1, css-modules (postcss and/or sass) into a simple cli tool.
 
-* Converts a directory of js or plain text files to a single-page site with a fallback to pre-rendered html
-* Outputs a fully static site (complete with an updated sitemap.xml) that is SEO friendly and ready to deploy on any web host
-* Automatically optimizes your production app with best practices like minification and code splitting
+Setting up a new project from scratch takes time. Boilerplates are hard to update as best practices change. Webpack is an incredibly powerful library, but can be overwhelming to a new user.
 
-piezo optimized your workflow by:
+In development mode, piezo starts up a server with an optimized webpack workflow and hot reloading of your entire application. It can also auto-generate react-router routes based on a folder structure.
 
-* Encouraging code reuse via React components
-* Hot reloading your entire site in development mode
+In production mode, piezo compiles and minifies all your javascript, extracts your styles, and manages best practices liked hashed ids for long term caching and code splitting for faster load times. Piezo can also pre-render an entire static website and so the initial page load is plain html and subsequent navigation is powered by react.
 
-## Ease of use
+## How do I use it?
 
-piezo is designed to allow developers and non-developers to collaborate on a website.
+mkdir my-app
+cd my-app
+npm init
+npm install --save piezo react react-dom react-router
+piezo server
+???
+piezo build
 
-piezo requires no complex webpack or routing configuration, you only need to provide a very simple project structure
 
-## What about other static generators?
+## Project Status
 
-Many other react-powered static site generators blur the lines between a library and a boilerplate.
-
-piezo aims to handle the low level generation logic and provide a strong foundation for your own site with minimal configuration.
-
-## Should I use piezo?
-
-If you'd like to build a site using:
-
-* react + react-router
-* es2016 + webpack 2.0 (with tree shaking)
-* postcss + css modules
-
-And not worry about configuration, piezo might be a good fit.
-
-If you're looking for a slightly different react-powered static site, check out:
-
-https://github.com/gatsbyjs/gatsby
-https://github.com/antwarjs/antwar
-https://github.com/MoOx/phenomic
-https://github.com/jakedeichert/rovr
-https://github.com/andreypopp/sitegen
-https://github.com/rpearce/react-static
-https://github.com/allanhortle/stalactite
-
-Please note that piezo is still very much in alpha mode.
-
-## Setup
-
-Add a piezo.config.js file to the root of your repo. This file should export a configuration object,
-
-```
-module.exports = {
-  html: {
-    title: '',                  // default page title
-    template: '',               // path to html template file (optional)
-    topComment: ''              // add a comment to the top of every html file (optional)
-  },
-  build: {
-    source: '',                 // path to source directory (default './src')
-    output: ''                  // path to build target (default './dist')
-  },
-  webpack: {
-    bundleName: '',             // base name for js bundle (default 'app')
-    publicPath: '',             // webpack public path (default '/static/')
-    plugins: [],                // require any additional webpack plugins to include in the production build (optional)
-    devPlugins: [],             // require any additional webpack plugins to include in development mode (optional)
-    loaders: [],                // require any additional webpack loaders (optional)
-    postCssPlugins: [],         // array of PostCSS plugins (optional, recommend autoprefixer at a minimum)
-  },
-  server: {
-    host: 'localhost',          // development server hostname (default localhost)
-    port: 8080,                 // development server port (default 8080)
-  },
-  sitemap: {
-    hostname: '',               // url of your site (used for sitemap generation)
-  }
-}
-
-```
-
-`${config.boud.source}/index.js` can also export a few items to extend functionality
-
-```
-export const routerProps = {
-  onError() {}
-}
-
-export function RootComponent(props) {
-  // if defined, this will wrap the entire site including the router
-  // (useful for integration with libraries like react-redux)
-}
-```
-
-## Usage
-
-```
-piezo server    # start the development server
-```
-```
-piezo build     # build your production-ready site
-```
-```
-piezo clean     # clean up all generated files
-```
-```
-piezo build && NODE_ENV=production piezo server    # build your production site and preview locally
-```
+Piezo is already being used for customer-facing sites and applications. However, peizo is still in an alpha stage and relies on some libraries in beta (including webpack 2.0).
 
 ## Contributing
 
-Feedback and PRs always welcome!
+Feedback and PRs welcome!

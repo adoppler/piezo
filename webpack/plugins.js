@@ -2,6 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlPlugin = require('html-webpack-plugin')
+const HappyPack = require('happypack')
 
 module.exports = function plugins(conf) {
   if (conf.production) {
@@ -62,5 +63,6 @@ module.exports = function plugins(conf) {
       },
       __DEV__: true
     }),
+    new HappyPack({ id: 'js', verbose: false })
   ].concat(conf.webpack.devPlugins || [])
 }

@@ -2,10 +2,18 @@ const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 module.exports = function loaders(conf) {
-  const cssLoader = { test: /\.css$/ }
+  const cssLoader = {
+    test: /\.css$/,
+    exclude: /node_modules/
+  }
+  const cssVendorLoader = {
+    test: /\.css$/,
+    include: /node_modules/
+  }
 
   if (conf.production) {
     cssLoader.loader = ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1&localIdentName=[hash:base64]!postcss')
+    cssVendorLoader.loader = ExtractTextPlugin.extract('style', 'css!postcss')
   } else {
     cssLoader.loaders = [
       'style?sourceMap',
@@ -16,6 +24,13 @@ module.exports = function loaders(conf) {
           importLoaders: true,
           localIdentName: '[name]__[local]___[hash:base64:5]',
         }
+      },
+      'postcss?sourceMap',
+    ]
+    cssVendorLoader.loaders = [
+      'style?sourceMap',
+      {
+        loader: 'css-loader',
       },
       'postcss?sourceMap',
     ]
@@ -76,17 +91,19 @@ module.exports = function loaders(conf) {
         path.resolve(conf.__root, conf.build.source),
         path.resolve(__dirname, '../entry')
       ],
+      happy: { id: 'js' }
     },
     {
       test: /\.(md|markdown)$/,
       loaders: [
-        { loader: 'babel', query: babelQuery },
+        { loader: 'babel?cacheDirectory', query: babelQuery },
         'page',
         'raw'
       ],
       include: path.resolve(conf.__root, conf.build.source, 'pages'),
     },
     cssLoader,
+    cssVendorLoader,
     sassLoader,
     {
       test: /\.(png|jpg|gif)$/,

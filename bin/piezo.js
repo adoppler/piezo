@@ -15,6 +15,14 @@ const webpackConfig = require('../webpack/webpack-config.js')(config)
 const input = path.join(config.__root, config.build.source)
 const output = path.join(config.__root, config.build.output)
 
+function init() {
+  return new Promise((resolve, reject) => {
+    cpr(path.join(__dirname, 'src'), input, err => {
+      err ? reject(err) : resolve()
+    })
+  })
+}
+
 function clean() {
   return new Promise((resolve, reject) => {
     rimraf(output, err => {
@@ -77,6 +85,8 @@ function build() {
 
 function cli(task) {
   switch (task) {
+    case 'init':
+      return init()
     case 'build':
       return build()
     case 'clean':
