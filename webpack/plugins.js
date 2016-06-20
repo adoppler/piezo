@@ -63,6 +63,6 @@ module.exports = function plugins(conf) {
       },
       __DEV__: true
     }),
-    new HappyPack({ id: 'js', verbose: false })
+    new HappyPack({ id: 'js', verbose: false, tempDir: path.join(__dirname, '../tmp/happypack') })
   ].concat(conf.webpack.devPlugins || [])
 }
