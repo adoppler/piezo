@@ -5,29 +5,29 @@
 *Generate a minimal project setup*
 ```
 npm install --save piezo react react-dom react-router
-piezo init
+$(npm bin)/piezo init
 ```
 or
 ```
 npm install --save piezo react react-dom react-router redux react-redux
-piezo init redux
+$(npm bin)/piezo init redux
 ```
 
 *Start up in development mode*
 ```
-piezo
+$(npm bin)/piezo
 ````
 
 *Build the site*
 ```
-piezo build
-piezo build --no-sitemap    # skip the sitemap.xml
-piezo build --no-render     # skip the pre-rendering and only generate an index.html file
+$(npm bin)/piezo build
+$(npm bin)/piezo build --no-sitemap    # skip the sitemap.xml
+$(npm bin)/piezo build --no-render     # skip the pre-rendering and only generate an index.html file
 ```
 
 *Preview the finished site locally (not recommended for use production)*
 ```
-piezo server
+$(npm bin)/piezo server
 ```
 
 ### Project Structure
