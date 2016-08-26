@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# if running globally, make sure we can find webpack-dashboard
+if [ -z "$APP_ROOT" ]; then
+  APP_ROOT="$( pwd )"
+  export PATH=$PATH:"${APP_ROOT}/node_modules/.bin":$PATH
+fi
+
+# get path to this file (http://stackoverflow.com/a/246128)
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
+case "$1" in
+  init)
+    cp "$DIR/../template/piezo.config.js" $APP_ROOT &> /dev/null
+    cp -r "$DIR/../template/src" $APP_ROOT &> /dev/null
+    if [ "$2" = "redux" ]; then
+      cp "$DIR/../template/redux/index.js" "$APP_ROOT/src" &> /dev/null
+    fi
+    APP_ROOT=$APP_ROOT piezo
+  ;;
+  build)
+    NODE_ENV=production node "$DIR/build.js" "$@"
+  ;;
+  server)
+    NODE_ENV=production node "$DIR/../server/index.js" "$@"
+  ;;
+  *)
+    webpack-dashboard node "$DIR/../server/index.js" "$@"
+  ;;
+esac

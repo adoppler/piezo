@@ -3,19 +3,29 @@ const config = require('../config')
 
 const app = express()
 
-if (process.env.NODE_ENV === 'production') {
-  require('./production')(app)
-} else {
-  require('./development')(app)
+const dev = require('./development')
+const prod = require('./production')
+
+if (config.devServerMiddleware) {
+  config.devServerMiddleware.forEach(m => {
+    app.use(...(Array.isArray(m) ? m : [m]))
+  })
 }
 
-const port = config.server.port || 8080
-const host = config.server.host || 'localhost'
+if (process.env.NODE_ENV === 'production') {
+  prod(config, app)
+} else {
+  dev(config, app)
+}
 
-app.listen(port, host, (err) => {
+const hostname = config.devServerHostname
+const port = config.devServerPort
+
+app.listen(port, hostname, (err) => {
   if (err) {
-    console.error(err)
+    console.error(err) // eslint-disable-line no-console
     process.exit(1)
+  } else if (config.production) {
+    console.log(`Listening at ${hostname}:${port}`) // eslint-disable-line no-console
   }
-  console.log(`Listening at https://${host}:${port}`)
 })

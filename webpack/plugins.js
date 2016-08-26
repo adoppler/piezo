@@ -1,66 +1,68 @@
-const path = require('path')
 const webpack = require('webpack')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlPlugin = require('html-webpack-plugin')
 
-module.exports = function plugins(conf) {
-  if (conf.production) {
+module.exports = function configureWebpackPlugins(options) {
+  if (options.production) {
     const base = [
       new webpack.DefinePlugin({
         'process.env': {
-          NODE_ENV: '"production"'
+          NODE_ENV: '"production"',
         },
-        __DEV__: false
+        __DEV__: false,
+        __PIEZO_HAS_INDEX__: options.__PIEZO_HAS_INDEX__,  // eslint-disable-line
       }),
-      new ExtractTextPlugin('css/[contenthash].css', { allChunks: true }),
+      new ExtractTextPlugin({ filename: 'css/[contenthash].css', allChunks: true }),
       new webpack.LoaderOptionsPlugin({
         minimize: true,
         debug: false,
       }),
     ]
 
-    if (conf.__serverRender) {
+    if (options.serverRender) {
       return base
     }
 
     return base.concat(
-      new webpack.optimize.UglifyJsPlugin({
+      new webpack.HashedModuleIdsPlugin({}),
+      new webpack.optimize.CommonsChunkPlugin({
+        children: true,
+        minChunks: 3,
+      }),
+      new webpack.optimize.MinChunkSizePlugin({
+        minChunkSize: 16384,
+      }),
+      new webpack.optimize.UglifyJsPlugin({ // TODO: not working on commons chunk?
         compressor: {
-          warnings: false
+          warnings: false,
         },
         comments: false,
         mangle: true,
+        sourceMap: true,
       }),
-      new webpack.optimize.CommonsChunkPlugin({
-        children: true,
-        minChunks: 3
-      }),
-      // new webpack.optimize.MinChunkSizePlugin({
-      //   minChunkSize: 16384 // TODO: broken
-      // }),
-      new webpack.HashedModuleIdsPlugin({}),
       new HtmlPlugin({
-        template: conf.html.template ? path.join(conf.__root, conf.html.template) : path.join(__dirname, 'template.html'),
+        template: options.htmlTemplate,
         filename: '../index.html',
         inject: true,
         minify: {
-          collapseWhitespace: true,
+          collapseWhitespace: false,
           preserveLineBreaks: true,
-        }
+        },
       }),
-      conf.webpack.plugins
+      options.webpackProductionPlugins
     )
   }
 
   return [
-    new webpack.HotModuleReplacementPlugin(),
     new webpack.HashedModuleIdsPlugin({}),
+    new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: '"development"'
+        NODE_ENV: '"development"',
       },
-      __DEV__: true
+      __DEV__: true,
+      __PIEZO_HAS_INDEX__: options.__PIEZO_HAS_INDEX__, // eslint-disable-line
     }),
-  ].concat(conf.webpack.devPlugins || [])
+  ].concat(options.webpackDevPlugins || [])
 }

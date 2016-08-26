@@ -1,18 +1,18 @@
 const path = require('path')
 
-module.exports = function entry(conf) {
-  if (conf.__serverRender) {
+module.exports = function configureWebpackEntry(options) {
+  if (options.serverRender) {
     return {
       bundle: path.join(__dirname, '../entry/server'),
     }
-  } else if (conf.production) {
+  } else if (options.production) {
     return {
-      [conf.webpack.bundleName]: path.join(__dirname, '../entry/site'),
+      bundle: path.join(__dirname, '../entry/site'),
     }
   }
 
   return [
-    'webpack-hot-middleware/client',
-    path.join(__dirname, '../entry/site')
+    'webpack-hot-middleware/client?reload=true&noInfo=true',
+    path.join(__dirname, '../entry/site'),
   ]
 }

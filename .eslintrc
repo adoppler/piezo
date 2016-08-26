@@ -1,0 +1,14 @@
+{
+  "extends": [
+    "airbnb-base"
+  ],
+  "globals": {
+    __PIEZO_HAS_INDEX__: true
+  },
+  "rules": {
+    "curly": [2, "all"],
+    "max-len": [2, 128],
+    "semi": [2, "never"],
+    "strict": 0
+  }
+}

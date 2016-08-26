@@ -1,11 +1,23 @@
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
-module.exports = function loaders(conf) {
-  const cssLoader = { test: /\.css$/ }
+module.exports = function configureWebpackLoaders(options) {
+  const cssLoader = {
+    test: /\.css$/,
+    exclude: /node_modules/,
+  }
+  const cssGlobalLoader = {
+    test: /\.css$/,
+    include: /(node_modules|\.global\.css)/,
+  }
 
-  if (conf.production) {
-    cssLoader.loader = ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1&localIdentName=[hash:base64]!postcss')
+  if (options.production) {
+    cssLoader.loader = ExtractTextPlugin.extract({
+      loader: 'css?modules&importLoaders=1&localIdentName=[hash:base64:5]!postcss',
+    })
+    cssGlobalLoader.loader = ExtractTextPlugin.extract({
+      loader: 'css!postcss',
+    })
   } else {
     cssLoader.loaders = [
       'style?sourceMap',
@@ -15,70 +27,73 @@ module.exports = function loaders(conf) {
           modules: true,
           importLoaders: true,
           localIdentName: '[name]__[local]___[hash:base64:5]',
-        }
+        },
+      },
+      'postcss?sourceMap',
+    ]
+    cssGlobalLoader.loaders = [
+      'style?sourceMap',
+      {
+        loader: 'css-loader',
       },
       'postcss?sourceMap',
     ]
   }
 
-  const sassLoader = { test: /\.s[ac]ss$/ }
-
-  if (conf.production) {
-    sassLoader.loader = ExtractTextPlugin.extract('style', `css?modules&importLoaders=1&localIdentName=[hash:base64]!postcss!sass${conf.webpack.toolbox ? '!toolbox' : ''}`)
-  } else {
-    sassLoader.loaders = [
-      'style?sourceMap',
-      {
-        loader: 'css-loader',
-        query: {
-          modules: true,
-          importLoaders: true,
-          localIdentName: '[name]__[local]___[hash:base64:5]',
-        }
+  const babelQuery = options.babelQuery || {
+    presets: [
+      'react',
+      ['es2015', { loose: true, modules: false }],
+      'stage-0',
+    ],
+    env: {
+      development: {
+        presets: [
+          'react-hmre',
+        ],
       },
-      'postcss?sourceMap',
-      'sass'
-    ]
-    if (conf.webpack.toolbox) {
-      sassLoader.loaders.push('toolbox')
-    }
+      production: {
+        plugins: [
+          'transform-react-remove-prop-types',
+          'transform-react-pure-class-to-function',
+        ],
+      },
+    },
+    cacheDirectory: true,
   }
 
   return [
     {
       test: /\.jsx?$/,
       loader: 'babel',
+      query: babelQuery,
       include: [
-        path.resolve(conf.__root, conf.build.source),
-        path.resolve(__dirname, '../entry')
+        /node_modules/,
+        path.resolve(options.appRoot, options.sourceDirectory),
+        path.resolve(__dirname, '../entry'),
       ],
     },
-    {
-      test: /\.(md|markdown)$/,
-      loader: 'babel!page!raw',
-      include: path.resolve(conf.__root, conf.build.source, 'pages'),
-    },
     cssLoader,
-    sassLoader,
+    cssGlobalLoader,
     {
       test: /\.(png|jpg|gif)$/,
-      loader: 'url?limit=2048,name=images/[name]-[hash].[ext]'
+      loader: 'url?limit=2048,name=images/[name]-[hash].[ext]',
     },
     {
       test: /\.(woff|woff2|ttf|eot|ico)$/,
-      loader: 'file?name=fonts/[hash].[ext]'
+      loader: 'file?name=fonts/[name]-[hash].[ext]',
     },
     {
       test: /\.json$/,
-      loader: 'json'
+      loader: 'json',
     },
     {
       test: /\.html$/,
-      loader: 'raw'
+      loader: 'raw',
     },
     {
       test: /\.svg$/,
-      loader: 'babel!react-svg'
+      loader: 'babel!react-svg',
     },
-  ].concat(conf.webpack.loaders || [])
+  ].concat(options.webpackLoaders || [])
 }

@@ -3,10 +3,11 @@ import { renderToString } from 'react-dom/server'
 import { RouterContext, match } from 'react-router'
 import Helmet from 'react-helmet'
 
-import routes from 'babel!routes!pages'
-import { RootComponent } from 'index.js'
+import routes from 'routes!pages'
+import { RootComponent, rootProps } from './customizations'
 
-export { routes }
+import routesList from 'routes?list!pages'
+export { routesList as routes }
 
 export function render(location) {
   return new Promise((resolve, reject) => {
@@ -16,7 +17,7 @@ export function render(location) {
       } else {
         try {
           const router = <RouterContext {...renderProps} />
-          const app = RootComponent ? <RootComponent>{router}</RootComponent> : router
+          const app = RootComponent ? <RootComponent {...rootProps}>{router}</RootComponent> : router
 
           const html = renderToString(app)
           const head = Helmet.rewind()

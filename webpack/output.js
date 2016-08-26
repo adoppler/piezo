@@ -1,27 +1,27 @@
 const path = require('path')
 
-module.exports = function output(conf) {
-  const target = path.join(conf.__root, conf.build.output, conf.webpack.publicPath)
+module.exports = function configureWebpackOutput(options) {
+  const target = path.join(options.distDirectory, options.publicPath)
 
-  if (conf.__serverRender) {
+  if (options.serverRender) {
     return {
-      path: path.join(conf.__root, conf.build.output, '.tmp'),
-      filename: `bundle.js`,
-      publicPath: conf.webpack.publicPath,
-      libraryTarget: 'commonjs2'
+      path: path.join(options.distDirectory, '.tmp'),
+      filename: 'bundle.js',
+      publicPath: options.publicPath,
+      libraryTarget: 'commonjs2',
     }
-  } else if (conf.production) {
+  } else if (options.production) {
     return {
       path: target,
       filename: 'js/[chunkhash].js',
       chunkFilename: 'js/[chunkhash].js',
-      publicPath: conf.webpack.publicPath,
+      publicPath: options.publicPath,
     }
   }
 
   return {
     path: target,
-    filename: `${conf.webpack.bundleName}.js`,
-    publicPath: conf.webpack.publicPath,
+    filename: 'bundle.js',
+    publicPath: options.publicPath,
   }
 }
