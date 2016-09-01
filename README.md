@@ -32,10 +32,10 @@ Production:
 ```
 npm init
 npm install --save piezo react react-dom react-router
-piezo init
-piezo
+$(npm bin)/piezo init
+$(npm bin)/piezo
 ???
-piezo build
+$(npm bin)/piezo build
 ```
 
 For more info, see the [the documentation](./DOCUMENTATION.md).
