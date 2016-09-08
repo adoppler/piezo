@@ -20,8 +20,14 @@ module.exports = function configureWebpack(options) {
       extensions: ['.js', '.json', '.css', '.sass', '.scss'],
       modules: [
         'node_modules',
+        'web_modules',
         options.sourceDirectory,
       ],
+    },
+    node: {
+      fs: 'empty',
+      net: 'empty',
+      dns: 'empty'
     },
     target: options.serverRender ? 'node' : 'web',
   }
