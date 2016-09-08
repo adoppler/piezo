@@ -27,7 +27,7 @@ module.exports = function configureWebpack(options) {
     node: {
       fs: 'empty',
       net: 'empty',
-      dns: 'empty'
+      dns: 'empty',
     },
     target: options.serverRender ? 'node' : 'web',
   }
