@@ -4,7 +4,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 module.exports = function configureWebpackLoaders(options) {
   const cssLoader = {
     test: /\.css$/,
-    exclude: /node_modules/,
+    exclude: /(node_modules|\.global\.css)/,
   }
   const cssGlobalLoader = {
     test: /\.css$/,
