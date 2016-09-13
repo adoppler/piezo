@@ -46,7 +46,6 @@
     "babel-preset-stage-0": "^6.5.0",
     "cpr": "^2.0.0",
     "css-loader": "^0.23.1",
-    "doc-ready": "^1.0.4",
     "express": "^4.14.0",
     "extract-text-webpack-plugin": "^2.0.0-beta.3",
     "file-loader": "^0.9.0",
@@ -64,7 +63,7 @@
     "sitemap-renderer": "^0.0.1",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
-    "webpack": "^2.1.0-beta.21",
+    "webpack": "^2.1.0-beta.22",
     "webpack-dashboard": "^0.1.7",
     "webpack-dev-middleware": "^1.6.1",
     "webpack-hot-middleware": "^2.10.0"

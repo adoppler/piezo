@@ -1,7 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom'
 import { match, Router, browserHistory } from 'react-router'
-import ready from 'doc-ready'
 
 import {
   routes as customRoutes,
@@ -12,8 +11,8 @@ import {
 
 const routes = customRoutes || require('routes!pages')
 
-ready(() => {
-  const router = <Router {...routerProps} children={routes} history={browserHistory} />
+match({ routes, history: browserHistory }, (error, redirectLocation, renderProps) => {
+  const router = <Router {...renderProps} {...routerProps} />
 
   render(
     RootComponent ? <RootComponent {...rootProps}>{router}</RootComponent> : router
