@@ -27,6 +27,7 @@ module.exports = function configureWebpackLoaders(options) {
           modules: true,
           importLoaders: true,
           localIdentName: '[name]__[local]___[hash:base64:5]',
+          discardDuplicates: false,
         },
       },
       'postcss?sourceMap',
@@ -35,6 +36,9 @@ module.exports = function configureWebpackLoaders(options) {
       'style?sourceMap',
       {
         loader: 'css-loader',
+        query: {
+          discardDuplicates: false,
+        },
       },
       'postcss?sourceMap',
     ]
@@ -60,6 +64,7 @@ module.exports = function configureWebpackLoaders(options) {
       },
     },
     cacheDirectory: true,
+    compact: false,
   }
 
   return [
@@ -68,10 +73,11 @@ module.exports = function configureWebpackLoaders(options) {
       loader: 'babel',
       query: babelQuery,
       include: [
-        /node_modules/,
-        path.resolve(options.appRoot, options.sourceDirectory),
         path.resolve(__dirname, '../entry'),
+        path.resolve(options.appRoot, options.sourceDirectory),
+        /node_modules/,
       ],
+      happy: { id: 'js' },
     },
     cssLoader,
     cssGlobalLoader,
