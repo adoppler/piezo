@@ -57,4 +57,12 @@ class TestPiezoBuild < MiniTest::Test
     file = "#{@@dist}/robots.txt"
     assert File.exist? file
   end
+
+  def test_postcss
+    file = Dir.glob("#{@@dist}/static/css/*.css").first
+    css = File.readlines(file).join('\n')
+
+    assert css.include? '-ms-flexbox'
+    assert !css.include?('.container')
+  end
 end
