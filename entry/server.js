@@ -3,10 +3,10 @@ import { renderToString } from 'react-dom/server'
 import { RouterContext, match } from 'react-router'
 import Helmet from 'react-helmet'
 
-import routes from 'routes!pages'
+import routes from 'routes-loader!pages'
 import { RootComponent, rootProps } from './customizations'
 
-import routesList from 'routes?list!pages'
+import routesList from 'routes-loader?list!pages'
 export { routesList as routes }
 
 export function render(location) {

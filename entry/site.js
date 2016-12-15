@@ -9,7 +9,7 @@ import {
   rootProps
 } from './customizations'
 
-const routes = customRoutes || require('routes!pages')
+const routes = customRoutes || require('routes-loader!pages')
 
 match({ routes, history: browserHistory }, (error, redirectLocation, renderProps) => {
   const router = <Router {...renderProps} {...routerProps} />

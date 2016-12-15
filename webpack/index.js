@@ -7,15 +7,15 @@ const postcss = require('./postcss')
 module.exports = function configureWebpack(options) {
   return {
     bail: options.production,
-    devtool: options.production ? null : 'cheap-module-eval-source-map',
+    devtool: options.production ? false : 'cheap-module-eval-source-map',
     entry: entry(options),
     module: {
-      loaders: loaders(options),
+      rules: loaders(options),
     },
     output: output(options),
     plugins: plugins(options),
-    postcss: postcss(options),
-    quiet: true,
+    // postcss: postcss(options),
+    // quiet: true,
     resolve: {
       extensions: ['.js', '.json', '.css', '.sass', '.scss'],
       modules: [

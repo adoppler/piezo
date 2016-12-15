@@ -13,34 +13,36 @@ module.exports = function configureWebpackLoaders(options) {
 
   if (options.production) {
     cssLoader.loader = ExtractTextPlugin.extract({
-      loader: 'css?modules&importLoaders=1&localIdentName=[hash:base64:5]!postcss',
+      fallbackLoader: 'style-loader',
+      loader: 'css-loader?modules&importLoaders=1&localIdentName=[hash:base64:5]!postcss-loader',
     })
     cssGlobalLoader.loader = ExtractTextPlugin.extract({
-      loader: 'css!postcss',
+      fallbackLoader: 'style-loader',
+      loader: 'css-loader!postcss-loader',
     })
   } else {
-    cssLoader.loaders = [
-      'style?sourceMap',
+    cssLoader.loader = [
+      'style-loader?sourceMap',
       {
         loader: 'css-loader',
-        query: {
+        options: {
           modules: true,
           importLoaders: true,
           localIdentName: '[name]__[local]___[hash:base64:5]',
           discardDuplicates: false,
         },
       },
-      'postcss?sourceMap',
+      'postcss-loader?sourceMap',
     ]
-    cssGlobalLoader.loaders = [
-      'style?sourceMap',
+    cssGlobalLoader.loader = [
+      'style-loader?sourceMap',
       {
         loader: 'css-loader',
-        query: {
+        options: {
           discardDuplicates: false,
         },
       },
-      'postcss?sourceMap',
+      'postcss-loader?sourceMap',
     ]
   }
 
@@ -70,36 +72,35 @@ module.exports = function configureWebpackLoaders(options) {
   return [
     {
       test: /\.jsx?$/,
-      loader: 'babel',
-      query: babelQuery,
+      loader: 'babel-loader',
+      options: babelQuery,
       include: [
         path.resolve(__dirname, '../entry'),
         path.resolve(options.appRoot, options.sourceDirectory),
         /node_modules/,
       ],
-      happy: { id: 'js' },
     },
     cssLoader,
     cssGlobalLoader,
     {
       test: /\.(png|jpg|gif)$/,
-      loader: 'url?limit=2048,name=images/[name]-[hash].[ext]',
+      loader: 'url-loader?limit=2048,name=images/[name]-[hash].[ext]',
     },
     {
       test: /\.(woff|woff2|ttf|eot|ico)$/,
-      loader: 'file?name=fonts/[name]-[hash].[ext]',
+      loader: 'file-loader?name=fonts/[name]-[hash].[ext]',
     },
     {
       test: /\.json$/,
-      loader: 'json',
+      loader: 'json-loader',
     },
     {
       test: /\.html$/,
-      loader: 'raw',
+      loader: 'raw-loader',
     },
     {
       test: /\.svg$/,
-      loader: 'babel!react-svg',
+      loader: 'babel-loader!react-svg-loader',
     },
   ].concat(options.webpackLoaders || [])
 }

@@ -2,7 +2,16 @@ const webpack = require('webpack')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlPlugin = require('html-webpack-plugin')
 
+const configurePostCss = require('./postcss')
+
 module.exports = function configureWebpackPlugins(options) {
+  const loaderConfig = {
+    options: {
+      context: options.appRoot,
+      postcss: configurePostCss(options),
+    },
+  }
+
   if (options.production) {
     const base = [
       new webpack.DefinePlugin({
@@ -13,10 +22,10 @@ module.exports = function configureWebpackPlugins(options) {
         __PIEZO_HAS_INDEX__: options.__PIEZO_HAS_INDEX__,  // eslint-disable-line
       }),
       new ExtractTextPlugin({ filename: 'css/[contenthash].css', allChunks: true }),
-      new webpack.LoaderOptionsPlugin({
+      new webpack.LoaderOptionsPlugin(Object.assign({}, loaderConfig, {
         minimize: true,
         debug: false,
-      }),
+      })),
     ]
 
     if (options.serverRender) {
@@ -57,6 +66,7 @@ module.exports = function configureWebpackPlugins(options) {
     new webpack.HashedModuleIdsPlugin({}),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
+    new webpack.LoaderOptionsPlugin(loaderConfig),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"development"',
