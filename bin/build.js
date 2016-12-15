@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 const fs = require('fs')
 const path = require('path')
 
@@ -52,11 +54,11 @@ function promiseToCompile(conf, plugins) {
       })
     }
 
-    compiler.run(err => {
+    compiler.run((err, stats) => {
       if (err) {
         reject(err)
       } else {
-        resolve()
+        resolve(stats)
       }
     })
   })
@@ -70,7 +72,13 @@ function compileSite(args, conf) {
       width: 60,
       summary: false,
     }),
-  ])
+  ]).then(stats => {
+    if (stats.compilation.warnings) {
+      stats.compilation.warnings.forEach(warning => {
+        console.warn(`${warning.message.trim()}\n`)
+      })
+    }
+  })
 }
 
 function compileServerBundle(args, conf) {

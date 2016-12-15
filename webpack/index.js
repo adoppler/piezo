@@ -2,7 +2,6 @@ const entry = require('./entry')
 const loaders = require('./loaders')
 const output = require('./output')
 const plugins = require('./plugins')
-const postcss = require('./postcss')
 
 module.exports = function configureWebpack(options) {
   return {
@@ -14,8 +13,7 @@ module.exports = function configureWebpack(options) {
     },
     output: output(options),
     plugins: plugins(options),
-    // postcss: postcss(options),
-    // quiet: true,
+    performance: { hints: !options.production },
     resolve: {
       extensions: ['.js', '.json', '.css', '.sass', '.scss'],
       modules: [

@@ -9,6 +9,7 @@ module.exports = {
   webpackLoaders: [],
   publicPath: '/static/',
   htmlTemplate: '',
+  webpackPerformanceHints: false,
   webpackProductionPlugins: [],
   webpackDevPlugins: [],
   postCSSPlugins: [],
