@@ -49,7 +49,7 @@ module.exports = function configureWebpackLoaders(options) {
   const babelQuery = options.babelQuery || {
     presets: [
       'react',
-      ['es2015', { loose: true, modules: false }],
+      ['latest', { loose: true, modules: false }],
       'stage-0',
     ],
     env: {
