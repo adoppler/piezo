@@ -13,7 +13,7 @@ module.exports = function configureWebpack(options) {
     },
     output: output(options),
     plugins: plugins(options),
-    performance: { hints: !options.production },
+    performance: { hints: options.production ? 'warning' : false },
     resolve: {
       extensions: ['.js', '.json', '.css', '.sass', '.scss'],
       modules: [

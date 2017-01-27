@@ -31,7 +31,8 @@ Production:
 
 ```
 npm init
-npm install --save piezo react react-dom react-router
+npm install --save piezo react@15 react-dom@15 react-router@3
+npm install --save-dev webpack@2
 $(npm bin)/piezo init
 $(npm bin)/piezo
 ???
