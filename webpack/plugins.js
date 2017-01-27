@@ -65,7 +65,7 @@ module.exports = function configureWebpackPlugins(options) {
   return [
     new webpack.HashedModuleIdsPlugin({}),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
     new webpack.LoaderOptionsPlugin(loaderConfig),
     new webpack.DefinePlugin({
       'process.env': {
