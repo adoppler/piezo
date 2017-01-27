@@ -25,7 +25,12 @@
     "builder",
     "generator",
     "webpack",
-    "react-rotuer"
+    "react-router",
+    "create-react-app",
+    "webpack-cli",
+    "webpack cli",
+    "webpack bundler",
+    "react bundler"
   ],
   "author": "adoppler",
   "license": "MIT",
