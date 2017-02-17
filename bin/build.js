@@ -118,7 +118,7 @@ function renderSite(args, conf, hostname, dist) {
   const render = () => {
     return {
       meta: '',
-      link: () => { ''},
+      link: '',
       title: '',
       html: '',
     }

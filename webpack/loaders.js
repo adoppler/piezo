@@ -60,7 +60,7 @@ module.exports = function configureWebpackLoaders(options) {
       },
       production: {
         plugins: [
-          'transform-react-remove-prop-types',
+          // 'transform-react-remove-prop-types', // breaks react-router
           'transform-react-pure-class-to-function',
         ],
       },
