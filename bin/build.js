@@ -98,15 +98,15 @@ function compileServerBundle(args, conf) {
 
 function renderSite(args, conf, hostname, dist) {
   const tmpdir = conf.output.path
-  const template = path.join(tmpdir, '../index.html')
-
-  const { routes, render } = require(path.join(tmpdir, conf.output.filename)) // eslint-disable-line global-require
+  const template = path.join(tmpdir, '..', conf.output.publicPath, '../index.html')
 
   if (args.render) {
+    const { routes, render } = require(path.join(tmpdir, conf.output.filename)) // eslint-disable-line global-require
+
     return sitemapRenderer.renderSite({
       render,
       template,
-      output: dist,
+      output: path.join(template, '..'),
       hostname,
       pages: routes.map(r => ({ uri: r.path, file: r.file })),
       skipSitemap: !args.sitemap,
@@ -115,12 +115,21 @@ function renderSite(args, conf, hostname, dist) {
     )
   }
 
+  const render = () => {
+    return {
+      meta: '',
+      link: () => { ''},
+      title: '',
+      html: '',
+    }
+  }
+
   return sitemapRenderer.renderSite({
     render,
     template,
-    output: dist,
-    hostname: conf.homepage,
-    pages: ['/'],
+    output: path.join(template, '..'),
+    hostname,
+    pages: [{ uri: '/', file: 'index.html' }],
     skipSitemap: !args.sitemap,
   }).then(() =>
     clean(tmpdir)
