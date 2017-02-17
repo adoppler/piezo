@@ -12,7 +12,7 @@ import {
 const routes = customRoutes || require('routes-loader!pages')
 
 match({ routes, history: browserHistory }, (error, redirectLocation, renderProps) => {
-  const router = <Router {...renderProps} {...routerProps} />
+  const router = <Router {...renderProps} {...routerProps} history={browserHistory} />
 
   render(
     RootComponent ? <RootComponent {...rootProps}>{router}</RootComponent> : router
