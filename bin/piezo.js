@@ -32,7 +32,6 @@ function build() {
   const webpack = require('webpack')
   const webpackConfig = require('../webpack/webpack-config.js')(config)
   const ProgressBarPlugin = require('progress-bar-webpack-plugin')
-  const generateSitemap = require('../sitemap/sitemap-generator')
 
   const startTime = Date.now()
 
@@ -56,6 +55,7 @@ function build() {
       compiler.run((webpackError) => {
         checkError(webpackError)
 
+        const generateSitemap = require('../sitemap/sitemap-generator')
         generateSitemap((sitemapError) => {
           checkError(sitemapError)
 

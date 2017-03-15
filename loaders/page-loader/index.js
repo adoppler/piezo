@@ -28,13 +28,16 @@ function createMarkdownComponent(src) {
   return PageComponent(props, props.layout, `<div>${html}</div>`)
 }
 
-module.exports = function pageLoader(source) {
+function pageLoader(source) {
   this.cacheable()
   const extension = this.resourcePath.match(/\.(\w+)$/)[1]
 
   try {
     if (extension === 'md' || extension === 'markdown' || extension === 'mdown') {
-      return createMarkdownComponent.call(this, this.exec(source.toString()))
+      console.log('source.toString()\n', source.toString())
+      const src = eval(source.toString())
+      console.log('got src', !!src)
+      return createMarkdownComponent.call(this, src)
     }
   } catch (e) {
     if (e instanceof SyntaxError || e.name === 'SyntaxError') {
@@ -45,4 +48,9 @@ module.exports = function pageLoader(source) {
 
 
   return source
+}
+
+module.exports = {
+  raw: pageLoader,
+  pitch: () => {},
 }
