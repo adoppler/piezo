@@ -55,12 +55,12 @@ function build() {
       compiler.run((webpackError) => {
         checkError(webpackError)
 
-        const generateSitemap = require('../sitemap/sitemap-generator')
-        generateSitemap((sitemapError) => {
-          checkError(sitemapError)
+        // const generateSitemap = require('../sitemap/sitemap-generator')
+        // generateSitemap((sitemapError) => {
+        //   checkError(sitemapError)
 
-          console.log(chalk.green.bold(`Success after (${(Date.now() - startTime) / 1000 + 's'})`))
-        })
+        //   console.log(chalk.green.bold(`Success after (${(Date.now() - startTime) / 1000 + 's'})`))
+        // })
       })
     })
   })
