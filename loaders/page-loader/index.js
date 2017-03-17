@@ -50,7 +50,5 @@ function pageLoader(source) {
   return source
 }
 
-module.exports = {
-  raw: pageLoader,
-  pitch: () => {},
-}
+module.exports = pageLoader
+module.exports.raw = true
