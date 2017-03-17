@@ -98,9 +98,5 @@ module.exports = function configureWebpackLoaders(options) {
       test: /\.html$/,
       loader: 'raw-loader',
     },
-    {
-      test: /\.svg$/,
-      loader: 'babel-loader!react-svg-loader',
-    },
   ].concat(options.webpackLoaders || [])
 }
