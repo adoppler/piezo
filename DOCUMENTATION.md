@@ -65,6 +65,7 @@ This file lets you hook into the app and routing process. If you're using react-
 export const routes = []          // if you want to define routes manually
 export const routerProps = {}     // if you need a little more control over react-router
 export const RootComponent        // wrap the entire app in another component
+export const basename = '/app'    // if you're serving under a subdirectory
 ```
 
 **piezo.config.js**

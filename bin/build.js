@@ -96,17 +96,20 @@ function compileServerBundle(args, conf) {
   ])
 }
 
-function renderSite(args, conf, hostname, dist) {
+function renderSite(args, conf, hostname, dist, publicPath) {
   const tmpdir = conf.output.path
-  const template = path.join(tmpdir, '../index.html')
 
-  const { routes, render } = require(path.join(tmpdir, conf.output.filename)) // eslint-disable-line global-require
+  const output = path.join(publicPath, '..')
+  const template = path.join(output, 'index.html')
+  const bundle = path.join(tmpdir, conf.output.filename)
+
+  const { routes, render } = require(bundle) // eslint-disable-line global-require
 
   if (args.render) {
     return sitemapRenderer.renderSite({
       render,
       template,
-      output: dist,
+      output,
       hostname,
       pages: routes.map(r => ({ uri: r.path, file: r.file })),
       skipSitemap: !args.sitemap,
@@ -118,7 +121,7 @@ function renderSite(args, conf, hostname, dist) {
   return sitemapRenderer.renderSite({
     render,
     template,
-    output: dist,
+    output,
     hostname: conf.homepage,
     pages: ['/'],
     skipSitemap: !args.sitemap,
@@ -145,7 +148,7 @@ clean(config.distDirectory)
   .then(() => copy(path.join(input, 'www'), path.join(output, '..')))
   .then(() => compileSite(argv, webpackConfig))
   .then(() => compileServerBundle(argv, webpackServerConfig))
-  .then(() => renderSite(argv, webpackServerConfig, config.homepage, config.distDirectory))
+  .then(() => renderSite(argv, webpackServerConfig, config.homepage, config.distDirectory, output))
   .then(() => {
     console.log('  finished') // eslint-disable-line no-console
   })
