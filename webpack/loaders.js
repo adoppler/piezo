@@ -69,16 +69,21 @@ module.exports = function configureWebpackLoaders(options) {
     compact: false,
   }
 
+  const babelInclude = [
+    path.resolve(__dirname, '../entry'),
+    path.resolve(options.appRoot, options.sourceDirectory),
+  ].concat
+
+  if (options.babelIncludeNodeModules) {
+    babelInclude.push(/node_modules/)
+  }
+
   return [
     {
       test: /\.jsx?$/,
       loader: 'babel-loader',
       options: babelQuery,
-      include: [
-        path.resolve(__dirname, '../entry'),
-        path.resolve(options.appRoot, options.sourceDirectory),
-        /node_modules/,
-      ],
+      include: babelInclude,
     },
     cssLoader,
     cssGlobalLoader,
