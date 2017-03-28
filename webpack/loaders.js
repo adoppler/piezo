@@ -72,7 +72,7 @@ module.exports = function configureWebpackLoaders(options) {
   const babelInclude = [
     path.resolve(__dirname, '../entry'),
     path.resolve(options.appRoot, options.sourceDirectory),
-  ].concat
+  ]
 
   if (options.babelIncludeNodeModules) {
     babelInclude.push(/node_modules/)
