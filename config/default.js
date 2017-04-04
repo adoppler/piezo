@@ -1,5 +1,6 @@
 module.exports = {
   homepage: '',
+  documentTitle: 'App',
   appRoot: '',
   sourceDirectory: 'src',
   distDirectory: 'dist',
