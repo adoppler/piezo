@@ -19,6 +19,7 @@ module.exports = function configureWebpackPlugins(options) {
           NODE_ENV: '"production"',
         },
         __DEV__: false,
+        __SERVER__: options.serverRender,
         __PIEZO_HAS_INDEX__: options.__PIEZO_HAS_INDEX__,  // eslint-disable-line
       }),
       new ExtractTextPlugin({ filename: 'css/[contenthash].css', allChunks: true }),
@@ -72,6 +73,7 @@ module.exports = function configureWebpackPlugins(options) {
         NODE_ENV: '"development"',
       },
       __DEV__: true,
+      __SERVER__: false,
       __PIEZO_HAS_INDEX__: options.__PIEZO_HAS_INDEX__, // eslint-disable-line
     }),
   ].concat(options.webpackDevPlugins || [])
