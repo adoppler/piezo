@@ -21,7 +21,7 @@ const conf = merge(defaultConfig, customConfig, {
 })
 
 conf.sourceDirectory = path.join(conf.appRoot, conf.sourceDirectory)
-conf.distDirectory = path.join(conf.appRoot, conf.distDirectory)
+conf.distDirectory = process.env.DIST_DIR || path.join(conf.appRoot, conf.distDirectory)
 conf.__PIEZO_HAS_INDEX__ = fs.existsSync(path.join(conf.sourceDirectory, 'index.js')) // eslint-disable-line
 
 if (!conf.htmlTemplate) {

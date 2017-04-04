@@ -82,7 +82,7 @@ function compileSite(args, conf) {
 }
 
 function compileServerBundle(args, conf) {
-  if (!args.render) {
+  if (!(args.render || args.sitemap)) {
     return Promise.resolve()
   }
 
@@ -103,27 +103,25 @@ function renderSite(args, conf, hostname, dist, publicPath) {
   const template = path.join(output, 'index.html')
   const bundle = path.join(tmpdir, conf.output.filename)
 
-  const { routes, render } = require(bundle) // eslint-disable-line global-require
+  let renderFn = () => ({ html: '', title: `<title>${config.documentTitle}</title>`, meta: '', link: '' })
+  let pages = [{ uri: '/', file: 'index.html' }]
 
-  if (args.render) {
-    return sitemapRenderer.renderSite({
-      render,
-      template,
-      output,
-      hostname,
-      pages: routes.map(r => ({ uri: r.path, file: r.file })),
-      skipSitemap: !args.sitemap,
-    }).then(() =>
-      clean(tmpdir)
-    )
+  if (args.render || args.sitemap) {
+    const { routes, render } = require(bundle) // eslint-disable-line global-require
+
+    if (args.render) {
+      renderFn = render
+    }
+
+    pages = routes.map(r => ({ uri: r.path, file: r.file }))
   }
 
   return sitemapRenderer.renderSite({
-    render,
+    render: renderFn,
     template,
     output,
-    hostname: conf.homepage,
-    pages: ['/'],
+    hostname,
+    pages,
     skipSitemap: !args.sitemap,
   }).then(() =>
     clean(tmpdir)
@@ -142,7 +140,6 @@ const webpackServerConfig = webpackConfigurator(Object.assign({}, config, { serv
 
 const output = webpackConfig.output.path
 const input = config.sourceDirectory
-
 
 clean(config.distDirectory)
   .then(() => copy(path.join(input, 'www'), path.join(output, '..')))
