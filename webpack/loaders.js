@@ -13,12 +13,12 @@ module.exports = function configureWebpackLoaders(options) {
 
   if (options.production) {
     cssLoader.loader = ExtractTextPlugin.extract({
-      fallbackLoader: 'style-loader',
-      loader: 'css-loader?modules&importLoaders=1&localIdentName=[hash:base64:8]!postcss-loader',
+      fallback: 'style-loader',
+      use: 'css-loader?modules&importLoaders=1&localIdentName=[hash:base64:8]!postcss-loader',
     })
     cssGlobalLoader.loader = ExtractTextPlugin.extract({
-      fallbackLoader: 'style-loader',
-      loader: 'css-loader!postcss-loader',
+      fallback: 'style-loader',
+      use: 'css-loader!postcss-loader',
     })
   } else {
     cssLoader.loader = [
