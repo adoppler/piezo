@@ -107,7 +107,7 @@ function renderSite(args, conf, hostname, dist, publicPath) {
   let pages = [{ uri: '/', file: 'index.html' }]
 
   if (args.render || args.sitemap) {
-    const { routes, render } = require(bundle) // eslint-disable-line global-require
+    const { routes, render } = require(bundle) // eslint-disable-line
 
     if (args.render) {
       renderFn = render
@@ -123,9 +123,7 @@ function renderSite(args, conf, hostname, dist, publicPath) {
     hostname,
     pages,
     skipSitemap: !args.sitemap,
-  }).then(() =>
-    clean(tmpdir)
-  )
+  }).then(() => clean(tmpdir))
 }
 
 const argv = minimist(process.argv.slice(3), {

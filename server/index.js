@@ -21,7 +21,7 @@ if (process.env.NODE_ENV === 'production') {
 const hostname = config.devServerHostname
 const port = config.devServerPort
 
-app.listen(port, hostname, (err) => {
+app.listen(port, hostname, err => {
   if (err) {
     console.error(err) // eslint-disable-line no-console
     process.exit(1)

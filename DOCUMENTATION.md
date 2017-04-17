@@ -81,8 +81,10 @@ module.exports = {
   webpackLoaders: [],               // Add any extra webpack loaders you might need
   webpackProductionPlugins: [],     // Add any extra webpack plugins for your production build
   webpackDevPlugins: [],            // Add any extra webpack plugins for your development build
+  webpackConfig: {},                // Extend the base webpack config
   postCSSPlugins: [],               // Piezo will use a default autoprefixer unless one is specified here
-  babelQuery: {},                   // Customize your babel configuration
+  autoprefixer: true,               // Set to false if you don't need postcss autoprefixer
+  babelQuery: {},                   // Customize your babel configuration by extending the base babel query
   devServerMiddleware: [],          // Add any express middleware to help with development
   devServerHostname: 'localhost',
   devServerPort: '8080',

@@ -7,7 +7,7 @@ const rootPath = require('app-root-path').path
 const defaultConfig = require('./default')
 
 const appRoot = process.env.APP_ROOT || rootPath
-const appPackage = require(path.join(appRoot, 'package.json'))
+const appPackage = require(path.join(appRoot, 'package.json')) // eslint-disable-line import/no-dynamic-require
 const customConfigPath = path.join(appRoot, 'piezo.config.js')
 
 let customConfig = {}

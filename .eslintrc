@@ -6,6 +6,7 @@
     __PIEZO_HAS_INDEX__: true
   },
   "rules": {
+    "arrow-parens": [2, "as-needed"],
     "curly": [2, "all"],
     "max-len": [2, 128],
     "semi": [2, "never"],
