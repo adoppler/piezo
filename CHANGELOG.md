@@ -2,6 +2,7 @@
 
 * Added: [babel-plugin-react-css-modules](https://github.com/gajus/babel-plugin-react-css-modules)
 * Added: Support for passing a basename to react-router
+* Changed: Make webpack-dashboard opt-in
 * Changed: Babel is disabled in node_modules by default
 * Changed: Removed default meta tags in template, customize with [react-helmet](https://github.com/nfl/react-helmet)
 * Config: Modified options.babelQuery now extends the current query instead of overwriting

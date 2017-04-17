@@ -30,7 +30,10 @@ case "$1" in
   server)
     NODE_ENV=production node "$DIR/../server/index.js" "$@"
   ;;
-  *)
+  dashboard)
     webpack-dashboard --minimal node "$DIR/../server/index.js" "$@"
+  ;;
+  *)
+    node "$DIR/../server/index.js" "$@"
   ;;
 esac

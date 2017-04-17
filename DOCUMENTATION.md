@@ -16,6 +16,7 @@ $(npm bin)/piezo init redux
 *Start up in development mode*
 ```
 $(npm bin)/piezo
+$(npm bin)/piezo dashboard
 ````
 
 *Build the site*

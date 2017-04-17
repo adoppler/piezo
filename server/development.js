@@ -9,7 +9,7 @@ module.exports = function piezoDevServer(config, app) {
   compiler.apply(new DashboardPlugin())
 
   app.use(require('webpack-dev-middleware')(compiler, {  // eslint-disable-line
-    quiet: true,
+    stats: webpackConfig.stats,
     publicPath: webpackConfig.output.publicPath,
   }))
 
