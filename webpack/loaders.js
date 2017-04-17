@@ -11,16 +11,19 @@ module.exports = function configureWebpackLoaders(options) {
     include: /(node_modules|\.global\.css)/,
   }
 
+  let localIdentName
   if (options.production) {
+    localIdentName = options.localIdentName || '[hash:base64:6]'
     cssLoader.loader = ExtractTextPlugin.extract({
       fallback: 'style-loader',
-      use: 'css-loader?modules&importLoaders=1&localIdentName=[hash:base64:8]!postcss-loader',
+      use: `css-loader?modules&importLoaders=1&localIdentName=${localIdentName}!postcss-loader`,
     })
     cssGlobalLoader.loader = ExtractTextPlugin.extract({
       fallback: 'style-loader',
       use: 'css-loader!postcss-loader',
     })
   } else {
+    localIdentName = options.localIdentName || '[name]__[local]__[hash:base64:6]'
     cssLoader.loader = [
       'style-loader?sourceMap',
       {
@@ -28,7 +31,7 @@ module.exports = function configureWebpackLoaders(options) {
         options: {
           modules: true,
           importLoaders: true,
-          localIdentName: '[name]__[local]___[hash:base64:5]',
+          localIdentName,
           discardDuplicates: false,
         },
       },
@@ -46,7 +49,10 @@ module.exports = function configureWebpackLoaders(options) {
     ]
   }
 
-  const babelQuery = options.babelQuery || {
+  const babelQuery = Object.assign({
+    plugins: [
+      ['babel-plugin-react-css-modules', { webpackHotModuleReloading: options.production, generateScopedName: localIdentName }],
+    ],
     presets: [
       'react',
       ['latest', { loose: true, modules: false }],
@@ -60,14 +66,13 @@ module.exports = function configureWebpackLoaders(options) {
       },
       production: {
         plugins: [
-          // 'transform-react-remove-prop-types', // TODO: breaks react-router
           'transform-react-pure-class-to-function',
         ],
       },
     },
     cacheDirectory: true,
     compact: false,
-  }
+  }, options.babelQuery)
 
   const babelInclude = [
     path.resolve(__dirname, '../entry'),

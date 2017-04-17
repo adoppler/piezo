@@ -20,10 +20,17 @@ export function render(location) {
           const app = RootComponent ? <RootComponent {...rootProps}>{router}</RootComponent> : router
 
           const html = renderToString(app)
-          const head = Helmet.rewind()
+          const helmet = Helmet.renderStatic()
 
           if (html) {
-            resolve({ html, title: head.title.toString(), meta: head.meta.toString(), link: head.link.toString() })
+            resolve({
+              html,
+              title: helmet.title.toString(),
+              meta: helmet.meta.toString(),
+              link: helmet.link.toString(),
+              style: helmet.style.toString(),
+              script: helmet.script.toString(),
+            })
           } else {
             reject({ message: `Nothing to render for ${location}` })
           }

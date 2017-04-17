@@ -1,18 +1,22 @@
 import React, { Component } from 'react'
+import Helmet from 'react-helmet'
 import { Link } from 'react-router'
 
-import css from './layout.css'
+import './layout.css'
 
 export default class Layout extends Component {
 
   render() {
     return (
-      <div className={css.container}>
-        <nav className={css.navigation}>
+      <div id="container" styleName="container">
+        <Helmet titleTemplate="%s - Test Site">
+          <meta charSet="utf-8" />
+        </Helmet>
+        <nav id="nav" styleName="navigation">
           <Link to="/">Home</Link>
           <Link to="/about">About</Link>
         </nav>
-        <main className={css.main}>
+        <main id="main" styleName="main">
           {this.props.children}
         </main>
       </div>

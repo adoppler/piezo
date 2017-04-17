@@ -42,7 +42,7 @@ module.exports = function configureWebpackPlugins(options) {
       new webpack.optimize.MinChunkSizePlugin({
         minChunkSize: 16384,
       }),
-      new webpack.optimize.UglifyJsPlugin({ // TODO: not working on commons chunk?
+      new webpack.optimize.UglifyJsPlugin({
         compressor: {
           warnings: false,
         },
@@ -59,7 +59,7 @@ module.exports = function configureWebpackPlugins(options) {
           preserveLineBreaks: true,
         },
       }),
-      options.webpackProductionPlugins
+      options.webpackProductionPlugins // eslint-disable-line
     )
   }
 

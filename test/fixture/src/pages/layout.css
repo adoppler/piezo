@@ -1,11 +1,11 @@
 .container {
-  display: flex;
+
 }
 
 .navigation {
-  color: green;
+
 }
 
 .main {
-  color: blue;
+  display: flex;
 }
