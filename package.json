@@ -1,6 +1,6 @@
 {
   "name": "piezo",
-  "version": "0.4.0",
+  "version": "0.4.0-beta1",
   "description": "React static site builder",
   "main": "index.js",
   "scripts": {

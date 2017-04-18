@@ -25,7 +25,7 @@ app.listen(port, hostname, err => {
   if (err) {
     console.error(err) // eslint-disable-line no-console
     process.exit(1)
-  } else if (config.production) {
+  } else {
     console.log(`Listening at ${hostname}:${port}`) // eslint-disable-line no-console
   }
 })
