@@ -11,6 +11,7 @@ module.exports = {
   publicPath: '/static/',
   htmlTemplate: '',
   webpackPerformanceHints: false,
+  webpackPlugins: [],
   webpackProductionPlugins: [],
   webpackDevPlugins: [],
   postCSSPlugins: [],

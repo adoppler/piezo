@@ -80,6 +80,7 @@ module.exports = {
   distDirectory: 'dist',            // Target output directly (relative to project root)
   publicPath: '/static/',           // The uri for all generated assets
   webpackLoaders: [],               // Add any extra webpack loaders you might need
+  webpackPlugins: [],               // Add any extra webpack plugins for all builds
   webpackProductionPlugins: [],     // Add any extra webpack plugins for your production build
   webpackDevPlugins: [],            // Add any extra webpack plugins for your development build
   webpackConfig: {},                // Extend the base webpack config

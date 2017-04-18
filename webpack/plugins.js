@@ -59,6 +59,7 @@ module.exports = function configureWebpackPlugins(options) {
           preserveLineBreaks: true,
         },
       }),
+      options.webpackPlugins,
       options.webpackProductionPlugins // eslint-disable-line
     )
   }
@@ -76,5 +77,5 @@ module.exports = function configureWebpackPlugins(options) {
       __SERVER__: false,
       __PIEZO_HAS_INDEX__: options.__PIEZO_HAS_INDEX__, // eslint-disable-line
     }),
-  ].concat(options.webpackDevPlugins || [])
+  ].concat(options.webpackPlugins || [], options.webpackDevPlugins || [])
 }
