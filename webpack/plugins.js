@@ -27,7 +27,7 @@ module.exports = function configureWebpackPlugins(options) {
         minimize: true,
         debug: false,
       })),
-    ]
+    ].concat(options.webpackPlugins || [])
 
     if (options.serverRender) {
       return base
@@ -59,7 +59,6 @@ module.exports = function configureWebpackPlugins(options) {
           preserveLineBreaks: true,
         },
       }),
-      options.webpackPlugins,
       options.webpackProductionPlugins // eslint-disable-line
     )
   }
