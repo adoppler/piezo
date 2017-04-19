@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-{{=it.title}}
-{{=it.meta}}
-{{=it.link}}
-{{=it.style}}
-{{=it.script}}
+{{=it.title || ''}}
+{{=it.meta || ''}}
+{{=it.link || ''}}
+{{=it.style || ''}}
+{{=it.script || ''}}
 </head>
 <body>
-<div id="react">{{=it.html}}</div>
+<div id="react">{{=it.html || ''}}</div>
 </body>
 </html>

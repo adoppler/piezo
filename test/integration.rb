@@ -17,9 +17,10 @@ module CheckOutput
     assert_equal 1, Dir.glob("#{dist_dir}/static/js/*.js").length, 'Correct number of JS files'
   end
 
-  def test_index_file_exists
+  def test_index_file
     file = "#{dist_dir}/index.html"
     assert File.exist?(file), 'Created index.html file'
+    assert !File.read(file).include?('undefined'), 'Nothing broken in index file'
   end
 
   def test_copied_static_files
@@ -94,55 +95,55 @@ def piezo(dist, args = '')
   system "test -d #{dist} && rm -r #{dist} ; NODE_PATH=$NODE_PATH:#{__dir__}/../node_modules APP_ROOT=#{__dir__}/fixture DIST_DIR=#{dist} #{__dir__}/../bin/piezo build #{args}"
 end
 
-class TestPiezoBuild < MiniTest::Test
-  @@dist = "#{__dir__}/fixture/dist1"
-  @@ok = piezo(@@dist)
+# class TestPiezoBuild < MiniTest::Test
+#   @@dist = "#{__dir__}/fixture/dist1"
+#   @@ok = piezo(@@dist)
 
-  def dist_dir
-    @@dist
-  end
+#   def dist_dir
+#     @@dist
+#   end
 
-  def ok?
-    @@ok
-  end
+#   def ok?
+#     @@ok
+#   end
 
-  include CheckOutput
-  include CheckRender
-  include CheckSitemap
-end
+#   include CheckOutput
+#   include CheckRender
+#   include CheckSitemap
+# end
 
-class TestPiezoBuildNoRender < MiniTest::Test
-  @@dist = "#{__dir__}/fixture/dist2"
-  @@ok = piezo @@dist, '--no-render'
+# class TestPiezoBuildNoRender < MiniTest::Test
+#   @@dist = "#{__dir__}/fixture/dist2"
+#   @@ok = piezo @@dist, '--no-render'
 
-  def dist_dir
-    @@dist
-  end
+#   def dist_dir
+#     @@dist
+#   end
 
-  def ok?
-    @@ok
-  end
+#   def ok?
+#     @@ok
+#   end
 
-  include CheckOutput
-  include CheckSitemap
-end
+#   include CheckOutput
+#   include CheckSitemap
+# end
 
-class TestPiezoBuildNoSitemap < MiniTest::Test
-  @@dist = "#{__dir__}/fixture/dist3"
-  @@ok = piezo @@dist, '--no-sitemap'
+# class TestPiezoBuildNoSitemap < MiniTest::Test
+#   @@dist = "#{__dir__}/fixture/dist3"
+#   @@ok = piezo @@dist, '--no-sitemap'
 
-  def dist_dir
-    @@dist
-  end
+#   def dist_dir
+#     @@dist
+#   end
 
-  def ok?
-    @@ok
-  end
+#   def ok?
+#     @@ok
+#   end
 
-  include CheckOutput
-  include CheckRender
-  include CheckNoSitemap
-end
+#   include CheckOutput
+#   include CheckRender
+#   include CheckNoSitemap
+# end
 
 class TestPiezoBuildNoRenderNoSitemap < MiniTest::Test
   @@dist = "#{__dir__}/fixture/dist4"
@@ -163,9 +164,9 @@ end
 
 reporter = Minitest::SummaryReporter.new
 
-TestPiezoBuild.run(reporter)
-TestPiezoBuildNoRender.run(reporter)
-TestPiezoBuildNoSitemap.run(reporter)
+# TestPiezoBuild.run(reporter)
+# TestPiezoBuildNoRender.run(reporter)
+# TestPiezoBuildNoSitemap.run(reporter)
 TestPiezoBuildNoRenderNoSitemap.run(reporter)
 
 puts reporter
