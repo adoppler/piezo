@@ -14,7 +14,7 @@ module.exports = function webpackConfig(options) {
   }, options)
 
   return {
-    devtool: conf.production ? null : 'cheap-module-eval-source-map',
+    devtool: conf.production ? false : 'cheap-module-eval-source-map',
     entry: entry(conf),
     module: {
       loaders: loaders(conf)

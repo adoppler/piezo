@@ -55,7 +55,7 @@ module.exports = function loaders(conf) {
     },
     {
       test: /\.(md|markdown)$/,
-      loader: 'babel!page!raw',
+      loader: 'babel!page-loader!raw',
       include: path.resolve(conf.__root, conf.build.source, 'pages'),
     },
     cssLoader,

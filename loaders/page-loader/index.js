@@ -34,9 +34,7 @@ function pageLoader(source) {
 
   try {
     if (extension === 'md' || extension === 'markdown' || extension === 'mdown') {
-      console.log('source.toString()\n', source.toString())
       const src = eval(source.toString())
-      console.log('got src', !!src)
       return createMarkdownComponent.call(this, src)
     }
   } catch (e) {
