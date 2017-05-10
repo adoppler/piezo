@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
 
-import App from 'index.js'
+import App from 'pages'
 
 const render = Component => {
   ReactDOM.render(
@@ -16,5 +16,5 @@ const render = Component => {
 render(App)
 
 if (module.hot) {
-  module.hot.accept('index.js', () => { render(App) })
+  module.hot.accept('pages', () => { render(App) })
 }
