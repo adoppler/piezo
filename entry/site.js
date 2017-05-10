@@ -16,5 +16,8 @@ const render = Component => {
 render(App)
 
 if (module.hot) {
-  module.hot.accept('pages', () => { render(App) })
+  module.hot.accept('pages', () => {
+    const NextApp = require('pages')
+    render(NextApp.default || NextApp)
+  })
 }
