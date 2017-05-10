@@ -60,8 +60,8 @@ module.exports = function configureWebpackLoaders(options) {
     ],
     env: {
       development: {
-        presets: [
-          'react-hmre',
+        plugins: [
+          'react-hot-loader/babel',
         ],
       },
       production: {

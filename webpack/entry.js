@@ -12,6 +12,7 @@ module.exports = function configureWebpackEntry(options) {
   }
 
   return [
+    'react-hot-loader/patch',
     'webpack-hot-middleware/client?reload=true&noInfo=true',
     path.join(__dirname, '../entry/site'),
   ]

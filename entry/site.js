@@ -1,26 +1,20 @@
 import React from 'react'
-import { render } from 'react-dom'
-import { match, Router, browserHistory } from 'react-router'
-import { useBasename } from 'history'
+import ReactDOM from 'react-dom'
+import { AppContainer } from 'react-hot-loader'
 
-import {
-  routes as customRoutes,
-  routerProps,
-  RootComponent,
-  rootProps,
-  basename,
-} from './customizations'
+import App from 'index.js'
 
-const routes = customRoutes || require('routes-loader!pages')
-const history = !basename ? browserHistory : useBasename(() => browserHistory)({ basename })
+const render = Component => {
+  ReactDOM.render(
+    <AppContainer>
+      <Component />
+    </AppContainer>,
+    document.getElementById('react')
+  )
+}
 
-match({ routes, history: history || browserHistory }, (error, redirectLocation, renderProps) => {
-  renderProps.history = history
-  renderProps.router = { ...renderProps.router, ...renderProps.history }
+render(App)
 
-  const router = <Router {...renderProps} {...routerProps} />
-
-  render(
-    RootComponent ? <RootComponent {...rootProps}>{router}</RootComponent> : router
-  , document.getElementById('react'))
-})
+if (module.hot) {
+  module.hot.accept('index.js', () => { render(App) })
+}
