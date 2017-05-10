@@ -55,8 +55,7 @@ module.exports = function configureWebpackLoaders(options) {
     ],
     presets: [
       'react',
-      ['latest', { loose: true, modules: false }],
-      'stage-0',
+      ['latest', Object.assign({ modules: false }, options.babelLatestOptions)],
     ],
     env: {
       development: {
