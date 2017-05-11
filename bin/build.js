@@ -111,6 +111,11 @@ function renderSite(args, conf, hostname, dist, publicPath) {
 
     if (args.render) {
       renderFn = render
+
+      const rawTemplate = fs.readFileSync(template).toString()
+      const fixedTemplate = rawTemplate.replace('<html>', "<html {{=it.htmlAttributes || ''}}>")
+                                       .replace('<body>', "<body {{=it.bodyAttributes || ''}}>")
+      fs.writeFileSync(template, fixedTemplate)
     }
 
     pages = routes.map(r => ({ uri: r.path, file: r.file }))
